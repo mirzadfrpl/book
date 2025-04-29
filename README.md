@@ -1,96 +1,84 @@
-# Web Library - Sistem Manajemen Perpustakaan
+# 📚 Web Library – Sistem Manajemen Perpustakaan
 
-Web Library adalah aplikasi berbasis web yang dikembangkan dengan Laravel 12 untuk membantu manajemen perpustakaan, termasuk fitur autentikasi, otorisasi, peminjaman buku, dan pengelolaan data buku. Sistem ini memungkinkan pengguna untuk melihat daftar buku dan stok yang tersedia, serta memberikan kontrol kepada admin untuk menyetujui peminjaman buku.
+**Web Library** adalah aplikasi perpustakaan berbasis web yang dibangun menggunakan Laravel 12. Aplikasi ini menyediakan fitur manajemen buku, peminjaman, serta autentikasi dan otorisasi pengguna, dengan dashboard khusus untuk admin dan antarmuka sederhana untuk pengguna umum.
 
-## Fitur
+## ✨ Fitur Utama
 
-- **Autentikasi Pengguna**: Pengguna dapat mendaftar, login, dan mengakses fitur yang tersedia sesuai peran mereka.
-- **Peminjaman Buku**: Pengguna dapat memesan buku untuk dipinjam, sementara admin dapat menyetujui atau menolak permintaan peminjaman.
-- **Manajemen Buku**: Admin dapat menambah, mengedit, dan menghapus buku dari database perpustakaan.
-- **Manajemen Pengguna**: Admin dapat melihat daftar pengguna dan mengelola peran mereka.
-- **Notifikasi Peminjaman**: Pengguna akan diberitahukan jika peminjaman buku mereka disetujui atau ditolak.
+- Autentikasi dan otorisasi pengguna
+- Manajemen buku (tambah, edit, hapus)
+- Peminjaman dan pengembalian buku
+- Validasi peminjaman oleh admin
+- Dashboard admin interaktif
+- Pencarian buku dan filter kategori
+- Notifikasi status peminjaman
 
-## Prasyarat
+## 🛠 Teknologi yang Digunakan
 
-Pastikan Anda memiliki hal-hal berikut sebelum memulai:
+- Laravel 12 (PHP)
+- Bootstrap 5
+- Vite
+- MySQL
+- Composer & NPM
 
-- PHP >= 8.0
-- Composer
-- Laravel 12
-- Database MySQL atau MariaDB
+## 🚀 Instalasi
 
-## Instalasi
-
-### Langkah 1: Clone Repository
+1. **Clone repository**
 
 ```bash
-git clone https://github.com/username/web-library.git
-cd web-library
-Langkah 2: Install Dependensi
-bash
-Copy
-Edit
+git clone https://github.com/mirzadfrpl/book.git
+cd book
+```
+
+2. **Install dependensi**
+
+```bash
 composer install
-Langkah 3: Konfigurasi Environment
-Salin file .env.example ke .env:
+npm install
+```
 
-bash
-Copy
-Edit
+3. **Salin dan konfigurasi file environment**
+
+```bash
 cp .env.example .env
-Edit .env dan sesuaikan konfigurasi database Anda:
+```
 
-makefile
-Copy
-Edit
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=web_library
-DB_USERNAME=root
-DB_PASSWORD=
-Langkah 4: Generate Key
-bash
-Copy
-Edit
+Atur konfigurasi database di file `.env`
+
+4. **Generate application key**
+
+```bash
 php artisan key:generate
-Langkah 5: Migrasi Database
-bash
-Copy
-Edit
-php artisan migrate
-Langkah 6: Menjalankan Aplikasi
-Jalankan server lokal:
+```
 
-bash
-Copy
-Edit
+5. **Migrasi dan seeder database**
+
+```bash
+php artisan migrate --seed
+```
+
+6. **Jalankan server lokal**
+
+```bash
 php artisan serve
-Sekarang buka browser Anda dan akses aplikasi melalui http://localhost:8000.
+```
 
-Penggunaan
-Pengguna: Setelah login, pengguna dapat melihat daftar buku dan melakukan peminjaman.
+Akses aplikasi di `http://localhost:8000`
 
-Admin: Admin dapat mengelola buku, memverifikasi peminjaman, dan mengelola akun pengguna.
+## 👤 Akun Demo
 
-Kontribusi
-Jika Anda ingin berkontribusi pada proyek ini, silakan ikuti langkah-langkah berikut:
+**Admin**
+- Email: `admin@gmail.com`
+- Password: `admin123`
 
-Fork repositori ini.
+**User**
+- Email: `user@gmail.com`
+- Password: `user123`
 
-Buat branch untuk fitur atau perbaikan baru (git checkout -b fitur-anda).
 
-Lakukan perubahan yang diperlukan dan commit (git commit -am 'Tambah fitur baru').
+## 🤝 Kontribusi
 
-Push ke branch (git push origin fitur-anda).
+Pull request sangat terbuka. Silakan fork repository ini dan buat perubahan yang kamu inginkan.
 
-Buat pull request.
+---
 
-Lisensi
-Proyek ini dilisensikan di bawah MIT License.
-
-go
-Copy
-Edit
-
-Ini adalah file `README.md` yang siap kamu gunakan. Semoga membantu!
+Dikembangkan oleh [@mirzadfrpl](https://github.com/mirzadfrpl)
