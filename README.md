@@ -1,66 +1,155 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 📚 Web Perpustakaan Laravel
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplikasi Web Perpustakaan berbasis Laravel 12 yang memungkinkan pengguna mengelola koleksi buku digital. Aplikasi ini dilengkapi dengan fitur autentikasi, peran pengguna (admin & user), manajemen file PDF dan thumbnail, serta sistem otorisasi berbasis middleware.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## ✨ Fitur Utama
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- ✅ Registrasi & Login pengguna
+- 👥 Role user & admin (dapat dipilih saat registrasi)
+- 📚 CRUD Buku oleh admin
+- 🖼️ Upload & tampilkan thumbnail buku
+- 📄 Upload & buka PDF buku dalam tab baru
+- 🔒 Middleware berbasis role untuk akses terbatas
+- 🚫 Halaman 403 jika pengguna tidak memiliki izin akses
+- 🧹 Reset database dengan mudah
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## ⚙️ Instalasi & Setup
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### 1. Clone Repository
+```bash
+git clone https://github.com/username/web-perpustakaan.git
+cd web-perpustakaan
+2. Install Dependency
+bash
+Copy
+Edit
+composer install
+npm install && npm run dev
+3. Copy File .env dan Generate Key
+bash
+Copy
+Edit
+cp .env.example .env
+php artisan key:generate
+4. Atur Database di .env
+env
+Copy
+Edit
+DB_DATABASE=perpustakaan
+DB_USERNAME=root
+DB_PASSWORD=
+5. Migrasi dan Buat Storage Link
+bash
+Copy
+Edit
+php artisan migrate
+php artisan storage:link
+6. Jalankan Server Lokal
+bash
+Copy
+Edit
+php artisan serve
+Akses aplikasi di: http://127.0.0.1:8000
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+👤 Role dan Akses
+Saat registrasi, user dapat memilih peran: admin atau user.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Hanya admin yang dapat mengakses dan mengelola /books.
 
-## Laravel Sponsors
+Jika user biasa mencoba mengakses halaman admin, akan diarahkan ke halaman 403.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+📁 Upload File
+Thumbnail dan PDF buku disimpan di storage/app/public.
 
-### Premium Partners
+File diakses melalui helper:
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+asset('storage/' . $book->thumbnail)
+asset('storage/' . $book->pdf)
+Saat buku dihapus, file PDF dan thumbnail juga akan otomatis terhapus dari storage menggunakan fungsi Storage::delete().
 
-## Contributing
+📑 Contoh Route Penting
+php
+Copy
+Edit
+// Middleware Role
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::resource('/books', BookController::class);
+});
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+// Halaman 403
+Route::view('/403', 'errors.403')->name('403');
+🧪 Reset Database
+Jika ingin membersihkan dan mengatur ulang database:
 
-## Code of Conduct
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+php artisan migrate:fresh --seed
+🧠 Credit
 
-## Security Vulnerabilities
+Dibuat oleh: Mirza 
+Framework: Laravel 12
+UI: Tailwind CSS
+PDF & Storage: Laravel Filesystem
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+🖼️ Tampilan Gambar & PDF
+Gambar buku ditampilkan dalam rasio proporsional.
 
-## License
+PDF dapat dibuka dalam tab baru dengan tombol:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+blade
+Copy
+Edit
+<a href="{{ asset('storage/' . $book->pdf) }}" target="_blank">
+    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-3">
+        Buka PDF
+    </button>
+</a>
+🔒 Middleware Role
+Middleware dibuat di:
+
+php
+Copy
+Edit
+// app/Http/Middleware/RoleMiddleware.php
+public function handle(Request $request, Closure $next, $role)
+{
+    if (!auth()->check() || auth()->user()->role !== $role) {
+        return redirect()->route('403');
+    }
+    return $next($request);
+}
+Daftarkan middleware di bootstrap/app.php pada ->withMiddleware():
+
+php
+Copy
+Edit
+$middleware->alias([
+    'role' => \App\Http\Middleware\RoleMiddleware::class,
+]);
+🆘 Troubleshooting
+Route Not Defined: Pastikan nama route di route() sesuai dengan yang didefinisikan.
+
+Storage Link Error: Pastikan menjalankan php artisan storage:link.
+
+PDF/Gambar Tidak Tampil: Periksa folder storage/app/public dan hak akses file.
+
+📬 Kontak
+Untuk pertanyaan atau kerja sama:
+
+Email: mirzadf123@gmail.com
+
+Instagram: @mirzadnshfr12_
+
+Terima kasih sudah menggunakan Web Perpustakaan! 🎉
+
+
+Kalau kamu butuh versi dengan badge, GitHub Actions, atau penjelasan deployment ke hosting (VPS/Shared), tinggal bilang saja. Mau ditambahkan?
+
+
+
+
+
+
