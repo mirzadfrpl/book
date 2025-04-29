@@ -1,155 +1,96 @@
-# 📚 Web Perpustakaan Laravel
+# Web Library - Sistem Manajemen Perpustakaan
 
-Aplikasi Web Perpustakaan berbasis Laravel 12 yang memungkinkan pengguna mengelola koleksi buku digital. Aplikasi ini dilengkapi dengan fitur autentikasi, peran pengguna (admin & user), manajemen file PDF dan thumbnail, serta sistem otorisasi berbasis middleware.
+Web Library adalah aplikasi berbasis web yang dikembangkan dengan Laravel 12 untuk membantu manajemen perpustakaan, termasuk fitur autentikasi, otorisasi, peminjaman buku, dan pengelolaan data buku. Sistem ini memungkinkan pengguna untuk melihat daftar buku dan stok yang tersedia, serta memberikan kontrol kepada admin untuk menyetujui peminjaman buku.
 
----
+## Fitur
 
-## ✨ Fitur Utama
+- **Autentikasi Pengguna**: Pengguna dapat mendaftar, login, dan mengakses fitur yang tersedia sesuai peran mereka.
+- **Peminjaman Buku**: Pengguna dapat memesan buku untuk dipinjam, sementara admin dapat menyetujui atau menolak permintaan peminjaman.
+- **Manajemen Buku**: Admin dapat menambah, mengedit, dan menghapus buku dari database perpustakaan.
+- **Manajemen Pengguna**: Admin dapat melihat daftar pengguna dan mengelola peran mereka.
+- **Notifikasi Peminjaman**: Pengguna akan diberitahukan jika peminjaman buku mereka disetujui atau ditolak.
 
-- ✅ Registrasi & Login pengguna
-- 👥 Role user & admin (dapat dipilih saat registrasi)
-- 📚 CRUD Buku oleh admin
-- 🖼️ Upload & tampilkan thumbnail buku
-- 📄 Upload & buka PDF buku dalam tab baru
-- 🔒 Middleware berbasis role untuk akses terbatas
-- 🚫 Halaman 403 jika pengguna tidak memiliki izin akses
-- 🧹 Reset database dengan mudah
+## Prasyarat
 
----
+Pastikan Anda memiliki hal-hal berikut sebelum memulai:
 
-## ⚙️ Instalasi & Setup
+- PHP >= 8.0
+- Composer
+- Laravel 12
+- Database MySQL atau MariaDB
 
-### 1. Clone Repository
+## Instalasi
+
+### Langkah 1: Clone Repository
+
 ```bash
-git clone https://github.com/username/web-perpustakaan.git
-cd web-perpustakaan
-2. Install Dependency
+git clone https://github.com/username/web-library.git
+cd web-library
+Langkah 2: Install Dependensi
 bash
 Copy
 Edit
 composer install
-npm install && npm run dev
-3. Copy File .env dan Generate Key
+Langkah 3: Konfigurasi Environment
+Salin file .env.example ke .env:
+
 bash
 Copy
 Edit
 cp .env.example .env
-php artisan key:generate
-4. Atur Database di .env
-env
+Edit .env dan sesuaikan konfigurasi database Anda:
+
+makefile
 Copy
 Edit
-DB_DATABASE=perpustakaan
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=web_library
 DB_USERNAME=root
 DB_PASSWORD=
-5. Migrasi dan Buat Storage Link
+Langkah 4: Generate Key
+bash
+Copy
+Edit
+php artisan key:generate
+Langkah 5: Migrasi Database
 bash
 Copy
 Edit
 php artisan migrate
-php artisan storage:link
-6. Jalankan Server Lokal
+Langkah 6: Menjalankan Aplikasi
+Jalankan server lokal:
+
 bash
 Copy
 Edit
 php artisan serve
-Akses aplikasi di: http://127.0.0.1:8000
+Sekarang buka browser Anda dan akses aplikasi melalui http://localhost:8000.
 
-👤 Role dan Akses
-Saat registrasi, user dapat memilih peran: admin atau user.
+Penggunaan
+Pengguna: Setelah login, pengguna dapat melihat daftar buku dan melakukan peminjaman.
 
-Hanya admin yang dapat mengakses dan mengelola /books.
+Admin: Admin dapat mengelola buku, memverifikasi peminjaman, dan mengelola akun pengguna.
 
-Jika user biasa mencoba mengakses halaman admin, akan diarahkan ke halaman 403.
+Kontribusi
+Jika Anda ingin berkontribusi pada proyek ini, silakan ikuti langkah-langkah berikut:
 
-📁 Upload File
-Thumbnail dan PDF buku disimpan di storage/app/public.
+Fork repositori ini.
 
-File diakses melalui helper:
+Buat branch untuk fitur atau perbaikan baru (git checkout -b fitur-anda).
 
-asset('storage/' . $book->thumbnail)
-asset('storage/' . $book->pdf)
-Saat buku dihapus, file PDF dan thumbnail juga akan otomatis terhapus dari storage menggunakan fungsi Storage::delete().
+Lakukan perubahan yang diperlukan dan commit (git commit -am 'Tambah fitur baru').
 
-📑 Contoh Route Penting
-php
+Push ke branch (git push origin fitur-anda).
+
+Buat pull request.
+
+Lisensi
+Proyek ini dilisensikan di bawah MIT License.
+
+go
 Copy
 Edit
-// Middleware Role
-Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::resource('/books', BookController::class);
-});
 
-// Halaman 403
-Route::view('/403', 'errors.403')->name('403');
-🧪 Reset Database
-Jika ingin membersihkan dan mengatur ulang database:
-
-
-php artisan migrate:fresh --seed
-🧠 Credit
-
-Dibuat oleh: Mirza 
-Framework: Laravel 12
-UI: Tailwind CSS
-PDF & Storage: Laravel Filesystem
-
-🖼️ Tampilan Gambar & PDF
-Gambar buku ditampilkan dalam rasio proporsional.
-
-PDF dapat dibuka dalam tab baru dengan tombol:
-
-blade
-Copy
-Edit
-<a href="{{ asset('storage/' . $book->pdf) }}" target="_blank">
-    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-3">
-        Buka PDF
-    </button>
-</a>
-🔒 Middleware Role
-Middleware dibuat di:
-
-php
-Copy
-Edit
-// app/Http/Middleware/RoleMiddleware.php
-public function handle(Request $request, Closure $next, $role)
-{
-    if (!auth()->check() || auth()->user()->role !== $role) {
-        return redirect()->route('403');
-    }
-    return $next($request);
-}
-Daftarkan middleware di bootstrap/app.php pada ->withMiddleware():
-
-php
-Copy
-Edit
-$middleware->alias([
-    'role' => \App\Http\Middleware\RoleMiddleware::class,
-]);
-🆘 Troubleshooting
-Route Not Defined: Pastikan nama route di route() sesuai dengan yang didefinisikan.
-
-Storage Link Error: Pastikan menjalankan php artisan storage:link.
-
-PDF/Gambar Tidak Tampil: Periksa folder storage/app/public dan hak akses file.
-
-📬 Kontak
-Untuk pertanyaan atau kerja sama:
-
-Email: mirzadf123@gmail.com
-
-Instagram: @mirzadnshfr12_
-
-Terima kasih sudah menggunakan Web Perpustakaan! 🎉
-
-
-Kalau kamu butuh versi dengan badge, GitHub Actions, atau penjelasan deployment ke hosting (VPS/Shared), tinggal bilang saja. Mau ditambahkan?
-
-
-
-
-
-
+Ini adalah file `README.md` yang siap kamu gunakan. Semoga membantu!
